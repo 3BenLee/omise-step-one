@@ -16,64 +16,67 @@ class App extends Component {
   }
   
   change = e => {
-    //this.setState({[e.target.name]: e.target.value}) 
    this.setState({inputData: e.target.value})
-   // console.log("e.target.value")
   }
-  findParent = arr => {
 
-  }
-  validationHandler = e => {
-    //console.log(this.state.inputData)
-    var data  = JSON.parse(this.state.inputData)
-    //this.setState({outputData: this.state.inputData})
-    var i = 0;
-
-    while (data[i] != null){
-    //console.log(data[i])
-    for (var j = 0; j < data[i].length; j++){
-      if (data[i][j].parent_id !=null){
-        //console.log(data[i][j].parent_id)
-        var z = 0;
-        while (data[z] != null){
-          var found = data[z].find(function(element) {
-            if (element.id === data[i][j].parent_id){
-              return element
-              //return data[i][j]
-            }
-            //console.log(found)
-          });
-          if(found !=null){
-            found.children.push(data[i][j])
-            //console.log(found)
-          }
-         
-          z = z+1;
+  parentFinder = (data,obj) => {
+    let z = 0;
+    while (data[z] != null){
+      var found = data[z].find((element) => {
+        if (element.id === obj.parent_id){
+          return element
         }
-
+      });
+      if(found != null){
+        found.children.push(obj)
       }
-     }
-    i = i+1;
-   }
-   //console.log(length)
-   this.setState({outputData:JSON.stringify(data[0],null,5)})
-   //{data.map((item,i) => {outData:item} )}
-   //this.outData = data
-  //this.setState({outData:data[0]})
+      z += 1;
+    }
+  }
+  
+//   validationHandler = e => {
+//     if(this.state.inputData !== "") {
+//       var data = JSON.parse(this.state.inputData)
+//       var i = 0;
+//     while (data[i] != null){
+//     for (var j = 0; j < data[i].length; j++){
+//       if (data[i][j].parent_id != null){
+//       this.parentFinder(data,data[i][j])
+//       }
+//      }
+//     i += 1;
+//    }
+//    this.setState({outputData:JSON.stringify(data[0],null,5)})
+//   } else {
+//     alert("Please enter some data!")
+//   }
+//  }
+
+validationHandler = e => {
+  if((this.state.inputData !== "") && (typeof this.state.inputData !== "number" || "string")) {
+    var data = JSON.parse(this.state.inputData)
+    var i = 0;
+  while (data[i] != null){
+  for (var j = 0; j < data[i].length; j++){
+  if (data[i][j].parent_id != null){
+  this.parentFinder(data,data[i][j])
+  }
  }
+i += 1;
+}
+this.setState({outputData:JSON.stringify(data[0],null,5)})
+} else {
+alert("Please Enter JSON Data!")
+}
+}
 
  resetHandler = (e) => {
    this.setState({inputData:""})
    this.setState({outputData:""})
-   //this.setState({mydata:""})
-   //console.log('button clicked');
  } 
  
-
   render() { 
-
-    return (
-     
+    return (  
       <div className="wrapper">
         <PageHeader />
         <Input name="inputData" value={this.state.inputData} onChange={this.change} placeholder={'Paste JSON Here'}/>
