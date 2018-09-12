@@ -6,14 +6,14 @@ const TitleWrapper = styled.div`
   height: 70px;
   background: #2C3A47; /*Navy*/
   position: absolute;
-  text-align: center;`
-  /* text-align: center; */
+  text-align: center;
+  `
 
 const Title = styled.h1`
   font-size: 3.5rem;
   color: #cd6133;
   margin: 0 auto;
-  `;
+  `
 
 
 const PageHeader = (props) => {

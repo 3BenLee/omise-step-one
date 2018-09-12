@@ -5,7 +5,8 @@ import Output from './components/PageWrapper/Output';
 import PageHeader from './components/PageWrapper/PageHeader';
 import ResetInputButton from './components/PageWrapper/ValidateButton';
 import ValidateButton from './components/PageWrapper/ValidateButton';
- 
+import isJSON from 'is-json';
+
 class App extends Component {
   constructor(props){
     super(props)
@@ -18,7 +19,7 @@ class App extends Component {
   change = e => {
    this.setState({inputData: e.target.value})
   }
-
+  // called in validationHandler
   parentFinder = (data,obj) => {
     let z = 0;
     while (data[z] != null){
@@ -33,47 +34,37 @@ class App extends Component {
       z += 1;
     }
   }
-  
-//   validationHandler = e => {
-//     if(this.state.inputData !== "") {
-//       var data = JSON.parse(this.state.inputData)
-//       var i = 0;
-//     while (data[i] != null){
-//     for (var j = 0; j < data[i].length; j++){
-//       if (data[i][j].parent_id != null){
-//       this.parentFinder(data,data[i][j])
-//       }
-//      }
-//     i += 1;
-//    }
-//    this.setState({outputData:JSON.stringify(data[0],null,5)})
-//   } else {
-//     alert("Please enter some data!")
-//   }
-//  }
 
+// Validate input and decide whether to parse it
 validationHandler = e => {
-  if((this.state.inputData !== "") && (typeof this.state.inputData !== "number" || "string")) {
-    var data = JSON.parse(this.state.inputData)
-    var i = 0;
-  while (data[i] != null){
-  for (var j = 0; j < data[i].length; j++){
-  if (data[i][j].parent_id != null){
-  this.parentFinder(data,data[i][j])
+    if(isJSON(this.state.inputData) && (this.state.inputData !== "")) {
+      var data = JSON.parse(this.state.inputData)
+      var i = 0;
+    // check for a parent id
+    while (data[i] != null){
+      for (var j = 0; j < data[i].length; j++){
+      if (data[i][j].parent_id != null){
+        // call parentFinder to attach objects to their parents
+        this.parentFinder(data,data[i][j])
+      }
+    }
+  i += 1;
   }
- }
-i += 1;
-}
-this.setState({outputData:JSON.stringify(data[0],null,5)})
-} else {
-alert("Please Enter JSON Data!")
-}
-}
-
- resetHandler = (e) => {
-   this.setState({inputData:""})
-   this.setState({outputData:""})
- } 
+  // checks if 
+  if(data[0]){
+    this.setState({outputData:JSON.stringify(data[0],null,5)})
+  } else if(data) {
+    this.setState({outputData:JSON.stringify(data,null,5)})
+  }
+  } else {
+    alert("Please Enter JSON Data!")
+    }
+} 
+  // reset button 
+  resetHandler = (e) => {
+    this.setState({inputData:""})
+    this.setState({outputData:""})
+  } 
  
   render() { 
     return (  

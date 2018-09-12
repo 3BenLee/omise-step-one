@@ -8,6 +8,7 @@ const OutputBox = styled.textarea`
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
     padding: 16px;
+    font-size: 18px;
 `;
 
 const Output = (props) => {
